@@ -1,34 +1,9 @@
-import random
+from constants import SQUARES_PER_ROW
+from math import floor
+from pathfind import Node, shortest_path
+from square import Square
 import pygame
-from constants import SQUARES_PER_ROW, WHITE, COLORS
-
-
-class Square():
-    def __init__(self, font: pygame.font, file: int, rank: int, size: float, weight: int) -> None:
-        self.font = font
-
-        self.file = file
-        self.rank = rank
-        self.size = size
-        self.weight = weight
-
-    def draw(self, screen: pygame.Surface) -> None:
-        """Draw a pygame.Rect at (x, y) position."""
-        x = self.file * self.size
-        y = self.rank * self.size
-        square = pygame.Rect(
-            x,
-            y,
-            self.size,
-            self.size)
-
-        pygame.draw.rect(screen, COLORS[self.weight], square)
-
-        self.text = self.font.render(f'{self.weight}', True, WHITE)
-        screen.blit(
-            self.text,
-            (x + self.size/2,
-             y + self.size/2 - self.font.get_height()/2))
+import random
 
 
 class Board():
@@ -42,17 +17,33 @@ class Board():
         self.square_size = self.screen.get_height() / SQUARES_PER_ROW
         self.board = [
             [Square(self.font, file, rank, self.square_size, 1) for file in self.row] for rank in self.row]
-        self._select_random_square()
+        self.selected_square = self._select_random_square()
 
-    def _select_random_square(self) -> None:
+        self._update_board()
+
+    def _update_board(self) -> None:
+        src = self.selected_square
+        src_node = Node(src.file, src.rank)
+
+        for i, file in enumerate(self.board):
+            for j, _ in enumerate(file):
+                dst = self.board[i][j]
+                dst_node = Node(dst.file, dst.rank)
+                dst.distance = shortest_path(
+                    src_node, dst_node)
+
+    def _select_random_square(self) -> Square:
         file = random.choice(self.row)
         rank = random.choice(self.row)
-        self.board[file][rank].weight = 0
+
+        square = self.board[file][rank]
+        square.distance = 0
+
+        return square
 
     def draw(self) -> None:
         """Draw chessboard."""
+
         for file in self.board:
             for rank in file:
                 rank.draw(self.screen)
-
-    # TODO: update squares
