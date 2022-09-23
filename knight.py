@@ -22,6 +22,9 @@ class Knight():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    self.board.reset_board_randomly()
 
     def run(self) -> None:
         """Start the main loop."""
@@ -32,7 +35,7 @@ class Knight():
             pygame.display.flip()
 
             # Tick
-            self.ck.tick(15)
+            self.ck.tick(60)
 
 
 if __name__ == '__main__':
