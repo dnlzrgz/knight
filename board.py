@@ -1,22 +1,22 @@
+from config import Config
 from constants import SQUARES_PER_ROW
-from math import floor
 from pathfind import Node, shortest_path
 from square import Square
-import pygame
 import random
 
 
 class Board():
-    def __init__(self, screen: pygame.Surface, font: pygame.font) -> None:
+    def __init__(self, config: Config) -> None:
         """Initializes a 8x8 chessboard."""
-        self.screen = screen
-        self.font = font
+        self.config = config
+        self.screen = self.config.screen
+        self.font = self.config.font
 
         self.row = range(SQUARES_PER_ROW)
 
-        self.square_size = self.screen.get_height() / SQUARES_PER_ROW
+        self.sq_size = self.screen.get_height() / SQUARES_PER_ROW
         self.board = [
-            [Square(self.font, file, rank, self.square_size, 1) for file in self.row] for rank in self.row]
+            [Square(self.config, file, rank, self.sq_size, 1) for file in self.row] for rank in self.row]
         self.selected_square = self._select_random_square()
 
         self._update_board()
@@ -43,7 +43,6 @@ class Board():
 
     def draw(self) -> None:
         """Draw chessboard."""
-
         for file in self.board:
             for rank in file:
-                rank.draw(self.screen)
+                rank.draw()

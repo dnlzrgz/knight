@@ -1,6 +1,6 @@
 import sys
 import pygame
-
+from config import Config
 from board import Board
 
 
@@ -9,19 +9,10 @@ class Knight():
         """Initializes the game."""
         pygame.init()
 
-        # TODO: add icon
-        pygame.display.set_caption("Knight")
-
-        self.screen_width = 800
-        self.screen_height = 800
-        self.screen = pygame.display.set_mode(
-            (self.screen_width, self.screen_height))
-
-        # TODO: use a better font
-        # TODO: improve font size
-        self.font = pygame.font.Font(None, 24)
-
-        self.board = Board(self.screen, self.font)
+        self.config = Config()
+        self.screen = self.config.screen
+        self.font = self.config.font
+        self.board = Board(self.config)
 
         self.ck = pygame.time.Clock()
 
@@ -41,7 +32,7 @@ class Knight():
             pygame.display.flip()
 
             # Tick
-            self.ck.tick(60)
+            self.ck.tick(15)
 
 
 if __name__ == '__main__':
