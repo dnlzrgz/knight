@@ -15,4 +15,4 @@ python3 knight.py
 ```
 
 ## How to use
-For the moment the only thing you can do is to press `r` to reset the knight position and with it the rest of the chessboard.
+Click on the desired position to move the knight around the chessboard. If you want a random position, press `r` or `spacebar`.
