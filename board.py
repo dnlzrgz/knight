@@ -2,50 +2,60 @@ from config import Config
 from constants import SQUARES_PER_ROW
 from pathfind import Node, shortest_path
 from square import Square
+from typing import Tuple
 import random
 
 
 class Board():
     def __init__(self, config: Config) -> None:
         """Initializes a 8x8 chessboard."""
-        self._config = config
-        self._screen = self._config.screen
-        self._font = self._config.font
+        self.__config = config
+        self.screen = self.__config.screen
+        self.font = self.__config.font
 
-        self._row = range(SQUARES_PER_ROW)
+        self.row = range(SQUARES_PER_ROW)
 
-        self._board = [
-            [Square(self._config, file, rank, 1) for file in self._row] for rank in self._row]
+        self.board = [
+            [Square(self.__config, file, rank, 1) for file in self.row] for rank in self.row]
 
-        self._selected_sq = self._select_random_square()
+        self.selected_sq = self._select_random_square()
         self._update_board()
 
     def _update_board(self) -> None:
-        src = self._selected_sq
+        src = self.selected_sq
         src_node = Node(src.file, src.rank)
 
-        for i, file in enumerate(self._board):
+        for i, file in enumerate(self.board):
             for j, _ in enumerate(file):
-                dst = self._board[i][j]
+                dst = self.board[i][j]
                 dst_node = Node(dst.file, dst.rank)
                 dst.distance = shortest_path(
                     src_node, dst_node)
 
     def _select_random_square(self) -> Square:
-        file = random.choice(self._row)
-        rank = random.choice(self._row)
+        file = random.choice(self.row)
+        rank = random.choice(self.row)
 
-        square = self._board[file][rank]
+        square = self.board[file][rank]
         square.distance = 0
 
         return square
 
+    def update_selected_sq(self, coords: Tuple) -> None:
+        for i, file in enumerate(self.board):
+            for j, _ in enumerate(file):
+                sq = self.board[i][j]
+                if sq.rect.collidepoint(coords[0], coords[1]):
+                    self.selected_sq = sq
+                    self._update_board()
+                    return
+
     def reset_board_randomly(self) -> None:
-        self._selected_sq = self._select_random_square()
+        self.selected_sq = self._select_random_square()
         self._update_board()
 
     def draw(self) -> None:
         """Draw chessboard."""
-        for file in self._board:
+        for file in self.board:
             for rank in file:
                 rank.draw()

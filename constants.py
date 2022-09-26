@@ -2,6 +2,10 @@ from pygame import Color
 
 SQUARES_PER_ROW = 8
 
+# All eight possible moves for a knight.
+FILE = [2, 2, -2, -2, 1, 1, -1, -1]
+RANK = [1, -1, 1, -1, 2, -2, 2, -2]
+
 WHITE = Color('white')
 
 COLORS = [

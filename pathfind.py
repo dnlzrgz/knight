@@ -1,5 +1,5 @@
 from collections import deque
-from constants import SQUARES_PER_ROW
+from constants import SQUARES_PER_ROW, RANK, FILE
 
 
 class Node():
@@ -23,11 +23,6 @@ class Node():
 def _is_valid(x: int, y: int) -> bool:
     """Check if (x, y) are valid chessboard coordinates."""
     return x >= 0 and x <= SQUARES_PER_ROW and y >= 0 and y <= SQUARES_PER_ROW
-
-
-# All eight possible moves for a knight.
-FILE = [2, 2, -2, -2, 1, 1, -1, -1]
-RANK = [1, -1, 1, -1, 2, -2, 2, -2]
 
 
 def shortest_path(src: Node, dst: Node) -> int:

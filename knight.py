@@ -1,7 +1,7 @@
-import sys
-import pygame
-from config import Config
 from board import Board
+from config import Config
+import pygame
+import sys
 
 
 class Knight():
@@ -9,10 +9,10 @@ class Knight():
         """Initializes the game."""
         pygame.init()
 
-        self.config = Config()
-        self.screen = self.config.screen
-        self.font = self.config.font
-        self.board = Board(self.config)
+        self.__config = Config()
+        self.screen = self.__config.screen
+        self.font = self.__config.font
+        self.board = Board(self.__config)
 
         self.ck = pygame.time.Clock()
 
@@ -23,8 +23,11 @@ class Knight():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_r or event.key == pygame.K_SPACE:
                     self.board.reset_board_randomly()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self.board.update_selected_sq(mouse_pos)
 
     def run(self) -> None:
         """Start the main loop."""
